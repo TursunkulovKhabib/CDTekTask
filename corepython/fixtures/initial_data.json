@@ -1,0 +1,19 @@
+[
+  {
+    "model": "core.customuser",
+    "pk": 1,
+    "fields": {
+      "username": "director",
+      "password": "pbkdf2_sha256$720000$test$hashedpassword",
+      "first_name": "Иван",
+      "last_name": "Директоров",
+      "email": "director@school.ru",
+      "role": "director",
+      "is_staff": true,
+      "is_superuser": true,
+      "is_active": true,
+      "groups": [],
+      "user_permissions": []
+    }
+  }
+]
