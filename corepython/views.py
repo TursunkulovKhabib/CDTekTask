@@ -48,4 +48,5 @@ class MeView(APIView):
             'full_name': user.get_full_name(),
             'role': user.role,
             'has_report_access': user.has_perm('corepython.can_view_reports'),
+            'student_id': getattr(getattr(user, 'student_profile', None), 'id', None),
         })

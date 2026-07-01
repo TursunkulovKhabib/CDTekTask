@@ -13,13 +13,22 @@
 
     <div class="tabs">
       <button
+        v-if="auth.role === 'director' || auth.role === 'teacher'"
         :class="['tab', { active: activeTab === 'student' }]"
         @click="activeTab = 'student'"
       >По студенту</button>
+
       <button
+        v-if="auth.role === 'director' || auth.role === 'teacher'"
         :class="['tab', { active: activeTab === 'group' }]"
         @click="activeTab = 'group'"
       >По группе (RAW SQL)</button>
+
+      <button
+        v-if="auth.role === 'student'"
+        :class="['tab', { active: activeTab === 'student' }]"
+        @click="activeTab = 'student'"
+      >Мои оценки</button>
     </div>
 
     <section v-if="activeTab === 'student'" class="report-section">
@@ -49,7 +58,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import ReportTable from '@/components/ReportTable.vue'
@@ -133,6 +142,14 @@ function handleLogout(): void {
   auth.logout()
   void router.push({ name: 'Login' })
 }
+
+onMounted(() => {
+  if (auth.role === 'student' && auth.studentId) {
+    studentId.value = auth.studentId
+    void loadStudentReport()
+  }
+})
+
 </script>
 
 <style scoped>

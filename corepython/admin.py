@@ -75,6 +75,30 @@ class GradeAdmin(admin.ModelAdmin):
     get_group.short_description = 'Группа'
 
 
+@admin.register(CustomUser)
+class CustomUserAdminSite(CustomUserAdmin):
+    pass
+
+
+@admin.register(Group)
+class GroupAdminSite(GroupAdmin):
+    pass
+
+
+@admin.register(Subject)
+class SubjectAdminSite(SubjectAdmin):
+    pass
+
+
+@admin.register(Student)
+class StudentAdminSite(StudentAdmin):
+    pass
+
+
+@admin.register(Grade)
+class GradeAdminSite(GradeAdmin):
+    pass
+
 
 director_site.register(CustomUser, CustomUserAdmin)
 director_site.register(Group, GroupAdmin)
@@ -178,10 +202,3 @@ class StudentSubjectAdmin(admin.ModelAdmin):
 
 student_site.register(Grade, StudentGradeAdmin)
 student_site.register(Subject, StudentSubjectAdmin)
-
-
-admin.site.register(CustomUser, CustomUserAdmin)
-admin.site.register(Group, GroupAdmin)
-admin.site.register(Subject, SubjectAdmin)
-admin.site.register(Student, StudentAdmin)
-admin.site.register(Grade, GradeAdmin)

@@ -25,22 +25,28 @@ class ReportService:
             )
         )
 
+    # Попробовал переписать на Grade.objects.raw
     @staticmethod
-    def get_group_report(group_id: int) -> list[tuple]:
+    def get_group_report(group_id: int) -> list[dict]:
         sql = """
-            SELECT
-                g.name        AS group_name,
-                s.name        AS subject_name,
-                AVG(gr.value) AS avg_grade
-            FROM corepython_grade gr
-            INNER JOIN corepython_student st  ON gr.student_id  = st.id
-            INNER JOIN corepython_group g     ON st.group_id    = g.id
-            INNER JOIN corepython_subject s   ON gr.subject_id  = s.id
-            WHERE g.id = %s
-            GROUP BY g.name, s.name
-            ORDER BY s.name
-        """
-        with connection.cursor() as cursor:
-            cursor.execute(sql, [group_id])
-            columns = [col[0] for col in cursor.description]
-            return [dict(zip(columns, row)) for row in cursor.fetchall()]
+              SELECT gr.id, 
+                     g.name        AS group_name, 
+                     s.name        AS subject_name, 
+                     AVG(gr.value) AS avg_grade
+              FROM corepython_grade gr
+              INNER JOIN corepython_student st ON gr.student_id = st.id
+              INNER JOIN corepython_group g ON st.group_id = g.id
+              INNER JOIN corepython_subject s ON gr.subject_id = s.id
+              WHERE g.id = %s
+              GROUP BY g.name, s.name
+              ORDER BY s.name 
+           """
+        results = Grade.objects.raw(sql, [group_id])
+        return [
+            {
+                'group_name': row.group_name,
+                'subject_name': row.subject_name,
+                'avg_grade': row.avg_grade,
+            }
+            for row in results
+        ]
